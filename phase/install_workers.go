@@ -44,7 +44,7 @@ func (p *InstallWorkers) ShouldRun() bool {
 
 // CleanUp attempts to clean up any changes after a failed install
 func (p *InstallWorkers) CleanUp() {
-	_ = p.After()
+	_ = p.AfterHook()
 	_ = p.hosts.Filter(func(h *cluster.Host) bool {
 		return !h.Metadata.Ready
 	}).ParallelEach(context.Background(), func(_ context.Context, h *cluster.Host) error {
@@ -63,7 +63,7 @@ func (p *InstallWorkers) CleanUp() {
 	})
 }
 
-func (p *InstallWorkers) After() error {
+func (p *InstallWorkers) AfterHook() error {
 	if NoWait {
 		for _, h := range p.hosts {
 			if h.Metadata.K0sTokenData.Token != "" {

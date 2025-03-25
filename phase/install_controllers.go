@@ -43,7 +43,7 @@ func (p *InstallControllers) ShouldRun() bool {
 
 // CleanUp cleans up the environment override files on hosts
 func (p *InstallControllers) CleanUp() {
-	_ = p.After()
+	_ = p.AfterHook()
 	_ = p.hosts.Filter(func(h *cluster.Host) bool {
 		return !h.Metadata.Ready
 	}).ParallelEach(context.Background(), func(_ context.Context, h *cluster.Host) error {
@@ -62,7 +62,7 @@ func (p *InstallControllers) CleanUp() {
 	})
 }
 
-func (p *InstallControllers) After() error {
+func (p *InstallControllers) AfterHook() error {
 	for i, h := range p.hosts {
 		if h.Metadata.K0sTokenData.Token == "" {
 			continue
